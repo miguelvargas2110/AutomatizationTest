@@ -1,0 +1,55 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/object1727358069.json",
+  "title": "Root",
+  "type": "object",
+  "required": [
+    "status",
+    "error",
+    "message",
+    "path"
+  ],
+  "properties": {
+    "status": {
+      "$id": "#root/status",
+      "title": "Status",
+      "type": "integer",
+      "examples": [
+        400
+      ],
+      "default": 0
+    },
+    "error": {
+      "$id": "#root/error",
+      "title": "Error",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "Bad Request"
+      ],
+      "pattern": "^.*$"
+    },
+    "message": {
+      "$id": "#root/message",
+      "title": "Message",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "Este usuario ya existe",
+        "Error al crear el usuario"
+      ],
+      "pattern": "^.*$"
+    },
+    "path": {
+      "$id": "#root/path",
+      "title": "Path",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "/signup"
+      ],
+      "pattern": "^.*$"
+    }
+  }
+}

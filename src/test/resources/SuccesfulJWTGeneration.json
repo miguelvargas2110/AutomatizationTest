@@ -1,0 +1,22 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/object1727359061.json",
+  "title": "Root",
+  "type": "object",
+  "required": [
+    "jwt"
+  ],
+  "properties": {
+    "jwt": {
+      "$id": "#root/jwt",
+      "title": "Jwt",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "eyJhbGciOiJIUzI1NiJ9.eyJwZXJtaXNzaW9ucyI6W10sImNoYW5nZVBhc3N3b3JkIjpmYWxzZSwic3ViIjoiTW9jaG8iLCJpc3MiOiJpbmdlc2lzLnVuaXF1aW5kaW8uZWR1LmNvIiwiaWF0IjoxNzI3MzUzODEzLCJleHAiOjE3MjczNTc0MTN9.82Sin6n0LjFSZO3B27OlJ3tf7Y5WzmbRY3nwlVe8sfY"
+      ],
+      "pattern": "^.*$"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/object1727354140.json",
+  "title": "Root",
+  "type": "object",
+  "required": [
+    "status",
+    "success",
+    "message",
+    "path"
+  ],
+  "properties": {
+    "status": {
+      "$id": "#root/status",
+      "title": "Status",
+      "type": "integer",
+      "examples": [
+        200
+      ],
+      "default": 0
+    },
+    "success": {
+      "$id": "#root/success",
+      "title": "Success",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "OK"
+      ],
+      "pattern": "^.*$"
+    },
+    "message": {
+      "$id": "#root/message",
+      "title": "Message",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "Usuario creado"
+      ],
+      "pattern": "^.*$"
+    },
+    "path": {
+      "$id": "#root/path",
+      "title": "Path",
+      "type": "string",
+      "default": "",
+      "examples": [
+        "/signup"
+      ],
+      "pattern": "^.*$"
+    }
+  }
+}

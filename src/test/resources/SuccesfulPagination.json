@@ -1,0 +1,341 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/object1727362080.json",
+  "title": "Root",
+  "type": "object",
+  "required": [
+    "content",
+    "pageable",
+    "last",
+    "totalElements",
+    "totalPages",
+    "size",
+    "number",
+    "sort",
+    "first",
+    "numberOfElements",
+    "empty"
+  ],
+  "properties": {
+    "content": {
+      "$id": "#root/content",
+      "title": "Content",
+      "type": "array",
+      "default": [],
+      "items":{
+        "$id": "#root/content/items",
+        "title": "Items",
+        "type": "object",
+        "required": [
+          "id_usuario",
+          "username",
+          "email",
+          "password",
+          "enabled",
+          "authorities",
+          "accountNonLocked",
+          "accountNonExpired",
+          "credentialsNonExpired"
+        ],
+        "properties": {
+          "id_usuario": {
+            "$id": "#root/content/items/id_usuario",
+            "title": "Id_usuario",
+            "type": "integer",
+            "examples": [
+              28
+            ],
+            "default": 0
+          },
+          "username": {
+            "$id": "#root/content/items/username",
+            "title": "Username",
+            "type": "string",
+            "default": "",
+            "examples": [
+              "Tunubala"
+            ],
+            "pattern": "^.*$"
+          },
+          "email": {
+            "$id": "#root/content/items/email",
+            "title": "Email",
+            "type": "string",
+            "default": "",
+            "examples": [
+              "Tunubala@gmail.com"
+            ],
+            "pattern": "^.*$"
+          },
+          "password": {
+            "$id": "#root/content/items/password",
+            "title": "Password",
+            "type": "string",
+            "default": "",
+            "examples": [
+              "$2a$10$I3GRaGIrW7otSelAbkjhVO8zbOxQsR2gM2xBIzmSJ6pYIGVvOYxYi"
+            ],
+            "pattern": "^.*$"
+          },
+          "enabled": {
+            "$id": "#root/content/items/enabled",
+            "title": "Enabled",
+            "type": "boolean",
+            "examples": [
+              true
+            ],
+            "default": true
+          },
+          "authorities": {
+            "$id": "#root/content/items/authorities",
+            "title": "Authorities",
+            "type": "array",
+            "default": []
+          },
+          "accountNonLocked": {
+            "$id": "#root/content/items/accountNonLocked",
+            "title": "Accountnonlocked",
+            "type": "boolean",
+            "examples": [
+              true
+            ],
+            "default": true
+          },
+          "accountNonExpired": {
+            "$id": "#root/content/items/accountNonExpired",
+            "title": "Accountnonexpired",
+            "type": "boolean",
+            "examples": [
+              true
+            ],
+            "default": true
+          },
+          "credentialsNonExpired": {
+            "$id": "#root/content/items/credentialsNonExpired",
+            "title": "Credentialsnonexpired",
+            "type": "boolean",
+            "examples": [
+              true
+            ],
+            "default": true
+          }
+        }
+      }
+
+    },
+    "pageable": {
+      "$id": "#root/pageable",
+      "title": "Pageable",
+      "type": "object",
+      "required": [
+        "pageNumber",
+        "pageSize",
+        "sort",
+        "offset",
+        "paged",
+        "unpaged"
+      ],
+      "properties": {
+        "pageNumber": {
+          "$id": "#root/pageable/pageNumber",
+          "title": "Pagenumber",
+          "type": "integer",
+          "examples": [
+            0
+          ],
+          "default": 0
+        },
+        "pageSize": {
+          "$id": "#root/pageable/pageSize",
+          "title": "Pagesize",
+          "type": "integer",
+          "examples": [
+            2
+          ],
+          "default": 0
+        },
+        "sort": {
+          "$id": "#root/pageable/sort",
+          "title": "Sort",
+          "type": "object",
+          "required": [
+            "empty",
+            "sorted",
+            "unsorted"
+          ],
+          "properties": {
+            "empty": {
+              "$id": "#root/pageable/sort/empty",
+              "title": "Empty",
+              "type": "boolean",
+              "examples": [
+                true
+              ],
+              "default": true
+            },
+            "sorted": {
+              "$id": "#root/pageable/sort/sorted",
+              "title": "Sorted",
+              "type": "boolean",
+              "examples": [
+                false
+              ],
+              "default": true
+            },
+            "unsorted": {
+              "$id": "#root/pageable/sort/unsorted",
+              "title": "Unsorted",
+              "type": "boolean",
+              "examples": [
+                true
+              ],
+              "default": true
+            }
+          }
+        }
+      ,
+        "offset": {
+          "$id": "#root/pageable/offset",
+          "title": "Offset",
+          "type": "integer",
+          "examples": [
+            0
+          ],
+          "default": 0
+        },
+        "paged": {
+          "$id": "#root/pageable/paged",
+          "title": "Paged",
+          "type": "boolean",
+          "examples": [
+            true
+          ],
+          "default": true
+        },
+        "unpaged": {
+          "$id": "#root/pageable/unpaged",
+          "title": "Unpaged",
+          "type": "boolean",
+          "examples": [
+            false
+          ],
+          "default": true
+        }
+      }
+    }
+  ,
+    "last": {
+      "$id": "#root/last",
+      "title": "Last",
+      "type": "boolean",
+      "examples": [
+        true
+      ],
+      "default": true
+    },
+    "totalElements": {
+      "$id": "#root/totalElements",
+      "title": "Totalelements",
+      "type": "integer",
+      "examples": [
+        2
+      ],
+      "default": 0
+    },
+    "totalPages": {
+      "$id": "#root/totalPages",
+      "title": "Totalpages",
+      "type": "integer",
+      "examples": [
+        1
+      ],
+      "default": 0
+    },
+    "size": {
+      "$id": "#root/size",
+      "title": "Size",
+      "type": "integer",
+      "examples": [
+        2
+      ],
+      "default": 0
+    },
+    "number": {
+      "$id": "#root/number",
+      "title": "Number",
+      "type": "integer",
+      "examples": [
+        0
+      ],
+      "default": 0
+    },
+    "sort": {
+      "$id": "#root/sort",
+      "title": "Sort",
+      "type": "object",
+      "required": [
+        "empty",
+        "sorted",
+        "unsorted"
+      ],
+      "properties": {
+        "empty": {
+          "$id": "#root/sort/empty",
+          "title": "Empty",
+          "type": "boolean",
+          "examples": [
+            true
+          ],
+          "default": true
+        },
+        "sorted": {
+          "$id": "#root/sort/sorted",
+          "title": "Sorted",
+          "type": "boolean",
+          "examples": [
+            false
+          ],
+          "default": true
+        },
+        "unsorted": {
+          "$id": "#root/sort/unsorted",
+          "title": "Unsorted",
+          "type": "boolean",
+          "examples": [
+            true
+          ],
+          "default": true
+        }
+      }
+    }
+  ,
+    "first": {
+      "$id": "#root/first",
+      "title": "First",
+      "type": "boolean",
+      "examples": [
+        true
+      ],
+      "default": true
+    },
+    "numberOfElements": {
+      "$id": "#root/numberOfElements",
+      "title": "Numberofelements",
+      "type": "integer",
+      "examples": [
+        2
+      ],
+      "default": 0
+    },
+    "empty": {
+      "$id": "#root/empty",
+      "title": "Empty",
+      "type": "boolean",
+      "examples": [
+        false
+      ],
+      "default": true
+    }
+  }
+}

@@ -10,7 +10,7 @@ public class    UserDatabaseUtil {
 
     private static final String URL = "jdbc:postgresql://db:5432/tallerApiRest";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "ROOT";
 
     public boolean verificarUsuarioExiste(String username) {
         String query = "SELECT COUNT(*) FROM usuario WHERE username = ?";

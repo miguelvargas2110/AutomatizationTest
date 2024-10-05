@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = "src/test/resources/features",
-        glue = "stepdefinitions",
+        features = "src/test/resources/features/7GherkinLogs.feature",
+        glue = "stepdefinitions/logs",
         plugin = {"pretty", "html:target/cucumber-reports.html"},
         monochrome = true
 )

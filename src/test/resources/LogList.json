@@ -1,0 +1,63 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/object1727359140.json",
+  "title": "LogList",
+  "type": "object",
+  "required": [
+    "status",
+    "data",
+    "path"
+  ],
+  "properties": {
+    "status": {
+      "$id": "#root/status",
+      "title": "Status",
+      "type": "string",
+      "examples": [
+        200
+      ],
+      "default": 0
+    },
+    "data": {
+      "$id": "#root/data",
+      "title": "Data",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "type": {
+            "type": "string",
+            "example": "ERROR"
+          },
+          "module": {
+            "type": "string",
+            "example": "UserService"
+          },
+          "message": {
+            "type": "string",
+            "example": "Error en la autenticación"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-04T12:34:56Z"
+          }
+        }
+      }
+    },
+    "path": {
+      "$id": "#root/path",
+      "title": "Path",
+      "type": "string",
+      "examples": [
+        "/logs"
+      ],
+      "pattern": "^.*$"
+    }
+  }
+}

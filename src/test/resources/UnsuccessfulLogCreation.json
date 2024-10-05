@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UnsuccessfulLogCreation",
+  "type": "object",
+  "required": ["status", "error", "message", "path"],
+  "properties": {
+    "status": {
+      "type": "integer"
+    },
+    "error": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "path": {
+      "type": "string"
+    }
+  }
+}

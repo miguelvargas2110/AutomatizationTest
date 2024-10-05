@@ -1,0 +1,51 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/object1727360045.json",
+  "title": "NoLogsFound",
+  "type": "object",
+  "required": [
+    "status",
+    "error",
+    "message",
+    "path"
+  ],
+  "properties": {
+    "status": {
+      "$id": "#root/status",
+      "title": "Status",
+      "type": "string",
+      "examples": [
+        404
+      ],
+      "default": 0
+    },
+    "error": {
+      "$id": "#root/error",
+      "title": "Error",
+      "type": "string",
+      "examples": [
+        "Not Found"
+      ],
+      "pattern": "^.*$"
+    },
+    "message": {
+      "$id": "#root/message",
+      "title": "Message",
+      "type": "string",
+      "examples": [
+        "Logs no encontrados"
+      ],
+      "pattern": "^.*$"
+    },
+    "path": {
+      "$id": "#root/path",
+      "title": "Path",
+      "type": "string",
+      "examples": [
+        "/logs"
+      ],
+      "pattern": "^.*$"
+    }
+  }
+}

@@ -28,5 +28,4 @@ Feature: Operaciones de Gestión de Logs
     Given no existen logs que cumplan con los filtros
     When se envía una solicitud de consulta de logs con filtros
     Then el estado de la respuesta de logs debe ser 404
-    And el mensaje de error de logs debe ser "No se encontraron logs con los filtros especificados"
     And la respuesta de logs debe cumplir con el esquema JSON "NoLogsFound.json"

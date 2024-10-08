@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class    UserDatabaseUtil {
 
-    private static final String URL = "jdbc:postgresql://db:5432/UserDB";
+    private static final String URL = "jdbc:postgresql://localhost:5432/UserDB";
     private static final String USER = "postgres";
     private static final String PASSWORD = "ROOT";
 

@@ -9,9 +9,9 @@ import java.sql.SQLException;
 
 
 public class LogsDatabaseUtil {
-    private static final String URL = "jdbc:postgresql://localhost:5432/logsDB";
+    private static final String URL = "jdbc:postgresql://localhost:5433/logsDB";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "ROOT";
 
     // Verifica si hay registros en la base de datos
     public static boolean hayRegistros() {

@@ -8,6 +8,7 @@ import io.restassured.matcher.ResponseAwareMatcher;
 import io.restassured.response.Response;
 import net.datafaker.Faker;
 import org.springframework.transaction.annotation.Transactional;
+import stepdefinitions.UserDatabaseUtil;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Transactional
 public class LogsStepDefinitions {
 
-    private String baseUrl = "http://localhost:8021";
+    UserDatabaseUtil userDatabaseUtil = new UserDatabaseUtil();
+
+    private String baseUrlUsers = "http://localhost:8001";
+    private String baseUrlLogs = "http://localhost:8002";
+
     private Response response;
     private String logType;
     private String className;
@@ -29,6 +34,10 @@ public class LogsStepDefinitions {
     private String description;
     private String generatedDate;
     private String token = "";
+    private String testUsername = "";
+    private String testPassword = "1234";
+    private String testEmail = "testuser@gmail.com";
+
 
     // Creación de log exitoso
     @Given("un nuevo log con detalles válidos")
@@ -56,7 +65,7 @@ public class LogsStepDefinitions {
         response = given()
                 .contentType("application/json")
                 .body(body)
-                .post(baseUrl + "/logs");
+                .post(baseUrlLogs + "/logs");
     }
 
     @Then("el estado de la respuesta de logs debe ser {int}")
@@ -95,7 +104,7 @@ public class LogsStepDefinitions {
         response = given()
                 .contentType("application/json")
                 .body(body)
-                .post(baseUrl + "/logs");
+                .post(baseUrlLogs + "/logs");
     }
 
     @And("el mensaje de error de logs debe ser {string}")
@@ -118,7 +127,7 @@ public class LogsStepDefinitions {
     @When("se envía una solicitud de consulta de logs con filtros válidos")
     public void seEnvíaUnaSolicitudDeConsultaDeLogsConFiltrosValidos() {
         response = given()
-                .get(baseUrl + "/logs");
+                .get(baseUrlLogs + "/logs");
     }
 
     @And("la respuesta debe contener una lista de logs")
@@ -134,7 +143,6 @@ public class LogsStepDefinitions {
         boolean existe = LogsDatabaseUtil.hayRegistros();
         if (!existe) {
             eliminarTodosLosLogs();
-
         }
     }
 
@@ -144,17 +152,86 @@ public class LogsStepDefinitions {
                 .queryParam("logType", "ERROR")
                 .queryParam("page", 1)
                 .queryParam("size", 10)
-                .get(baseUrl + "/logs");
+                .get(baseUrlLogs + "/logs");
     }
-
-
 
     private void eliminarTodosLosLogs() {
         // Llamada a la API para eliminar todos los logs
         response = given()
                 .contentType("application/json")
-                .delete(baseUrl + "/logs/all");
+                .delete(baseUrlLogs + "/logs/all");
     }
+
+    //Verificación de integración
+    @Given("que un usuario llamado {string} no existe en el sistema")
+    public void queUnUsuarioLlamadoNoExisteEnElSistema(String username) {
+        this.testUsername = username;
+        verificarUsuarioELogs();
+    }
+
+    @When("el usuario {string} es creado en el sistema de autenticación")
+    public void elUsuarioEsCreadoEnElSistemaDeAutenticacion(String username) {
+        this.testUsername = username;
+
+        String body = "{ \"username\": \"" + testUsername + "\", \"password\": \"" + testPassword + "\", \"email\": \"" + testEmail + "\"}";
+
+        response = given()
+                .contentType("application/json")
+                .body(body)
+                .post(baseUrlUsers + "/signup");
+    }
+
+    @Then("se debe registrar un log con el mensaje {string} en el sistema de logs")
+    public void seDebeRegistrarUnLogConElMensajeEnElSistemaDeLogs(String description) {
+        response = given()
+                .header("Authorization", "Bearer " + token)
+                .contentType("multipart/form-data")
+                .multiPart("description", description)
+                .get(baseUrlLogs + "/logs/logByDescription");
+    }
+
+    @And("el mensaje de la respuesta debe ser {string}")
+    public void elMensajeDeLaRespuestaDebeSer(String mensaje) {
+        String mensajeResponse = response.jsonPath().getString("message");
+        assertEquals(mensaje, mensajeResponse);
+    }
+
+    public void verificarUsuarioELogs(){
+        boolean existe = userDatabaseUtil.verificarUsuarioExiste(testUsername);
+        if(existe){
+            generarTokenLogs();
+            borrarUsuarioLogs();
+        }
+    }
+
+    public void borrarUsuarioLogs(){
+        testUsername = "testUser";
+        seEnvíaUnaSolicitudDeEliminacionConElUsuarioLogs();
+    }
+
+    public void seEnvíaUnaSolicitudDeEliminacionConElUsuarioLogs() {
+        response = given()
+                .header("Authorization", "Bearer " + token)
+                .contentType("multipart/form-data")
+                .multiPart("username", testUsername)
+                .delete(baseUrlUsers + "/user");
+    }
+
+
+    public void generarTokenLogs(){
+
+        String body = "{ \"username\": \"Ortiz\", \"password\": \"1234\" }";
+
+        response = given()
+                .contentType("application/json")
+                .body(body)
+                .post(baseUrlUsers + "/login");
+
+        token = response.jsonPath().getString("jwt");
+    }
+
+
+
 
 
 

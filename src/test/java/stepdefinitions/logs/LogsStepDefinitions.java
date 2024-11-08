@@ -4,7 +4,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
-import io.restassured.matcher.ResponseAwareMatcher;
 import io.restassured.response.Response;
 import net.datafaker.Faker;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,9 +11,7 @@ import stepdefinitions.UserDatabaseUtil;
 
 import java.time.LocalDateTime;
 
-import static com.google.common.base.Predicates.equalTo;
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

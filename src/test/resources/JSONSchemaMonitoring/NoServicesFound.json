@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "integer",
+      "const": 500
+    },
+    "message": {
+      "type": "string",
+      "const": "Error al obtener los servicios"
+    },
+    "error": {
+      "type": "string"
+    }
+  },
+  "required": ["status", "message", "error"]
+}

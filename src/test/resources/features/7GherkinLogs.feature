@@ -8,27 +8,27 @@ Feature: Operaciones de Gestión de Logs
     When se envía una solicitud de creación de log con los datos del log
     Then el estado de la respuesta de logs debe ser 201
     And el mensaje de respuesta de logs debe ser "Log creado con éxito"
-    And la respuesta de logs debe cumplir con el esquema JSON "SuccessfulLogCreation.json"
+    And la respuesta de logs debe cumplir con el esquema JSON "JSONSchemaLogs/SuccessfulLogCreation.json"
 
   Scenario: Creación de log inválido
     Given un nuevo log con detalles inválidos
     When se envía una solicitud de creación de log con los datos inválidos
     Then el estado de la respuesta de logs debe ser 500
     And el mensaje de error de logs debe ser "Error al crear el log"
-    And la respuesta de logs debe cumplir con el esquema JSON "UnsuccessfulLogCreation.json"
+    And la respuesta de logs debe cumplir con el esquema JSON "JSONSchemaLogs/UnsuccessfulLogCreation.json"
 
   Scenario: Consulta de logs exitosa
     Given existen logs registrados en el sistema
     When se envía una solicitud de consulta de logs con filtros válidos
     Then el estado de la respuesta de logs debe ser 200
     And la respuesta debe contener una lista de logs
-    And la respuesta de logs debe cumplir con el esquema JSON "LogList.json"
+    And la respuesta de logs debe cumplir con el esquema JSON "JSONSchemaLogs/LogList.json"
 
   Scenario: Consulta de logs sin resultados
     Given no existen logs que cumplan con los filtros
     When se envía una solicitud de consulta de logs con filtros
     Then el estado de la respuesta de logs debe ser 404
-    And la respuesta de logs debe cumplir con el esquema JSON "NoLogsFound.json"
+    And la respuesta de logs debe cumplir con el esquema JSON "JSONSchemaLogs/NoLogsFound.json"
 
   Scenario: Verificar la creación de un usuario y el registro de su log
     Given que un usuario llamado "testUser" no existe en el sistema

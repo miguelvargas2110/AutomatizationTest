@@ -19,7 +19,7 @@ public class MailStepDefinitions {
     private String nombreServicio;
     private String endpointServicio;
     private Response response;
-    private final String baseUrlMail = "http://localhost:8004/mail/enviar";
+    private final String baseUrlMail = "http://localhost:8005/mail/enviar";
 
     @Given("un destinatario con el correo {string}")
     public void unDestinatarioConLosCorreos(String correos) {
@@ -80,6 +80,6 @@ public class MailStepDefinitions {
         response = given()
                 .contentType("application/json")
                 .body("{}")
-                .post("http://localhost:8004/mail/enviar");
+                .post("http://localhost:8005/mail/enviar");
     }
 }

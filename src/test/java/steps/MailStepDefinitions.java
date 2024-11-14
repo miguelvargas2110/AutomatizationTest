@@ -79,6 +79,6 @@ public class MailStepDefinitions {
         response = given()
                 .contentType("application/json")
                 .body("{}")
-                .post("http://localhost:8005/mail/enviar");
+                .post(baseUrlMail);
     }
 }

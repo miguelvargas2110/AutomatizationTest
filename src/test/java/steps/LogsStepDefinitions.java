@@ -216,7 +216,7 @@ public class LogsStepDefinitions {
 
     public void generarTokenLogs(){
 
-        String body = "{ \"username\": \"Ortiz\", \"password\": \"1234\" }";
+        String body = "{ \"username\": \"" + testUsername + "\", \"password\": \"" + testPassword;
 
         response = given()
                 .contentType("application/json")

@@ -26,15 +26,16 @@ pipeline {
                 // Ejecutar las pruebas con Gradle, especificando la clase TestRunner si es necesario
                 sh './gradlew test --tests runners.TestRunner'
             }
-        }
 
-        post {
-            always {
-                // Publicar los resultados de las pruebas en el reporte de Jenkins (usando el formato JUnit)
-                junit 'target/surefire-reports/*.xml'
+            post {
+                always {
+                    // Publicar los resultados de las pruebas en el reporte de Jenkins (usando el formato JUnit)
+                    junit '**/build/test-results/test/*.xml'
 
-                // Archivar los reportes de Cucumber si los tienes generados (especifica la ruta correcta)
-                archiveArtifacts artifacts: 'target/cucumber-reports.html', allowEmptyArchive: true
+                    // Archivar los reportes de Cucumber si los tienes generados (especifica la ruta correcta)
+                    archiveArtifacts artifacts: '**/build/reports/cucumber/*.html', allowEmptyArchive: true
+                }
             }
         }
     }
+}

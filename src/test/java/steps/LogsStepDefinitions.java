@@ -35,6 +35,14 @@ public class LogsStepDefinitions {
     private String testEmail = "testuser@gmail.com";
 
 
+    private static String limitTo255(String text) {
+        if (text.length() > 255) {
+            return text.substring(0, 255);
+        }
+        return text;
+    }
+
+
     // Creación de log exitoso
     @Given("un nuevo log con detalles válidos")
     public void unNuevoLogConDetallesValidos() {
@@ -44,6 +52,11 @@ public class LogsStepDefinitions {
         summary = faker.lorem().sentence();
         description = faker.lorem().paragraph();
         generatedDate = LocalDateTime.now().toString();
+
+        // Limitar a 255 caracteres
+        className = limitTo255(className);
+        summary = limitTo255(summary);
+        description = limitTo255(description);
     }
 
     @When("se envía una solicitud de creación de log con los datos del log")

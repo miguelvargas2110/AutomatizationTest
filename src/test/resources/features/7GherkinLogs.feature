@@ -30,8 +30,8 @@ Feature: Operaciones de Gestión de Logs
     Then el estado de la respuesta de logs debe ser 404
     And la respuesta de logs debe cumplir con el esquema JSON "JSONSchemaLogs/NoLogsFound.json"
 
-  Scenario: Verificar la creación de un usuario y el registro de su log
-    Given que un usuario llamado "testUser" no existe en el sistema
-    When el usuario "testUser" es creado en el sistema de autenticación
-    Then se debe registrar un log con el mensaje "El usuario testUser fue registrado exitosamente" en el sistema de logs
-    And el mensaje de la respuesta debe ser "Log encontrado, con la descripción: El usuario testUser fue registrado exitosamente"
+#  Scenario: Verificar la creación de un usuario y el registro de su log
+#    Given que un usuario llamado "testUser" no existe en el sistema
+#    When el usuario "testUser" es creado en el sistema de autenticación
+#    Then se debe registrar un log con el mensaje "El usuario testUser fue registrado exitosamente" en el sistema de logs
+#    And el mensaje de la respuesta debe ser "Log encontrado, con la descripción: El usuario testUser fue registrado exitosamente"

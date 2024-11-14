@@ -1,4 +1,4 @@
-package stepdefinitions;
+package steps;
 
 import com.rabbitmq.client.*;
 import io.cucumber.java.en.*;

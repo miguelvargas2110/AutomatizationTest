@@ -1,4 +1,4 @@
-package stepdefinitions.logs;
+package steps;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -7,7 +7,6 @@ import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import net.datafaker.Faker;
 import org.springframework.transaction.annotation.Transactional;
-import stepdefinitions.UserDatabaseUtil;
 
 import java.time.LocalDateTime;
 

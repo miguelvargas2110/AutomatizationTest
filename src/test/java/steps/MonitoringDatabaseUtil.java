@@ -1,4 +1,4 @@
-package stepdefinitions.healthMonitor;
+package steps;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

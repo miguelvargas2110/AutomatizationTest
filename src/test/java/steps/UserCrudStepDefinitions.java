@@ -1,6 +1,13 @@
-package stepdefinitions;
+package steps;
 
 
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.DockerClientImpl;
+import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -9,7 +16,7 @@ import io.restassured.response.Response;
 import net.datafaker.Faker;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.time.Duration;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -28,9 +35,89 @@ public class UserCrudStepDefinitions {
     private int tamanoPagina;
     private int numeroPagina;
 
+    public DockerClient dockerClientInit() {
+        DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
+        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
+                .dockerHost(config.getDockerHost())
+                .sslConfig(config.getSSLConfig())
+                .maxConnections(100)
+                .connectionTimeout(Duration.ofSeconds(30))
+                .responseTimeout(Duration.ofSeconds(45))
+                .build();
+
+        return DockerClientImpl.getInstance(config, httpClient);
+    }
+
+    public void encenderContenedor() {
+        DockerClient dockerClient = dockerClientInit();
+        InspectContainerResponse container = dockerClient.inspectContainerCmd("proyectomicros-authUser-1").exec();
+
+        // Verifica si el contenedor está detenido antes de iniciarlo
+        if ("exited".equals(container.getState().getStatus())) {
+            dockerClient.startContainerCmd(container.getId()).exec();
+            System.out.println("Iniciando contenedor: " + container.getName());
+
+            // Espera activa: verifica cada segundo si el contenedor está en "running"
+            int maxRetries = 15;  // Intentar por hasta 30 segundos
+            int retries = 0;
+            while (!"running".equals(container.getState().getStatus()) && retries < maxRetries) {
+                try {
+                    Thread.sleep(2000); // Espera de 5 segundos
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                container = dockerClient.inspectContainerCmd("proyectomicros-authUser-1").exec();
+                retries++;
+            }
+
+            if ("running".equals(container.getState().getStatus())) {
+                System.out.println("Contenedor iniciado correctamente.");
+
+                // Espera adicional para asegurar que la aplicación esté lista
+                waitForApplicationToBeReady();
+            } else {
+                System.out.println("Tiempo de espera agotado. El contenedor no se inició.");
+            }
+        } else {
+            System.out.println("El contenedor ya está en ejecución: " + container.getName());
+        }
+    }
+
+    private void waitForApplicationToBeReady() {
+        int maxRetries = 15;
+        int retries = 0;
+        while (retries < maxRetries) {
+            try {
+                Response response = given()
+                        .baseUri("http://localhost:8001")
+                        .get("/health");
+
+                if (response.statusCode() == 200 &&
+                        response.jsonPath().getString("status").equals("UP")) {
+                    System.out.println("La aplicación está lista.");
+                    return;
+                } else {
+                    System.out.println("Esperando a que la aplicación esté lista...");
+                }
+            } catch (Exception e) {
+                System.out.println("Error al verificar la aplicación: " + e.getMessage());
+            }
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            retries++;
+        }
+
+        System.out.println("Tiempo de espera agotado. La aplicación no está lista.");
+    }
+
     //SignUp
     @Given("un nuevo usuario con detalles válidos")
     public void unNuevoUsuarioConDetallesVálidos() {
+        encenderContenedor();
         Faker faker = new Faker();
 
         // Generar datos aleatorios
@@ -45,6 +132,7 @@ public class UserCrudStepDefinitions {
 
     @Given("un nuevo usuario con detalles invalidos")
     public void unNuevoUsuarioConDetallesInvalidos() {
+        encenderContenedor();
         verificarUsuarioNoE();
         username = "Ortiz";
         password = "123456";
@@ -70,12 +158,14 @@ public class UserCrudStepDefinitions {
     //Login
     @Given("un usuario con credenciales válidas")
     public void unUsuarioConCredencialesValidas() {
+        encenderContenedor();
         username = "Ortiz";
         password = "1234";
     }
 
     @Given("un usuario con credenciales inválidas")
     public void unUsuarioConCredencialesInvalidas() {
+        encenderContenedor();
         username = "Ortiz";
         password = "123456";
     }
@@ -99,11 +189,13 @@ public class UserCrudStepDefinitions {
     //Autenticacion de usuario
     @Given("Un usuario autenticado")
     public void unUsuarioAutenticado() {
+        encenderContenedor();
         verificarUsuarioNoE();
     }
 
     @Given("Un usuario no autenticado")
     public void unUsuarioNoAutenticado() {
+        encenderContenedor();
         token = "";
     }
 
@@ -166,7 +258,7 @@ public class UserCrudStepDefinitions {
     //Pageable
     @Given("Hay usuarios en la base de datos")
     public void hayUsuariosEnLaBaseDeDatos() {
-
+        encenderContenedor();
     }
 
     @And("se dan valores positivos para {int} y {int}")
@@ -216,11 +308,13 @@ public class UserCrudStepDefinitions {
     //generateChangePasswordToken
     @Given("Un usuario existente")
     public void unUsuarioExistente() {
+        encenderContenedor();
         username = "Ortiz";
     }
 
     @Given("Un usuario no existente")
     public void unUsuarioNoExistente() {
+        encenderContenedor();
         username = "Miguel";
     }
 
@@ -235,6 +329,7 @@ public class UserCrudStepDefinitions {
     //ChangePassword
     @Given("Un usuario valido para hacer el cambio de contraseña")
     public void unUsuarioValidoParaHacerElCambioDeContraseña() {
+        encenderContenedor();
         username = "Ortiz";
         password = "1234566";
         generarTokenCambio();
@@ -243,6 +338,7 @@ public class UserCrudStepDefinitions {
 
     @Given("Un usuario invalido para hacer el cambio de contraseña")
     public void unUsuarioInvalidoParaHacerElCambioDeContraseña() {
+        encenderContenedor();
         username = "Tunubala";
         password = "1234";
         generarTokenCambio();

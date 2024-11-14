@@ -1,4 +1,4 @@
-package stepdefinitions.apiGateway;
+package steps;
 
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
@@ -13,14 +13,12 @@ import io.cucumber.java.en.When;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.springframework.transaction.annotation.Transactional;
-import stepdefinitions.UserCrudStepDefinitions;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.github.dockerjava.api.DockerClient;
-import stepdefinitions.profiles.ProfilesStepsDefinitions;
 
 import java.time.Duration;
 
@@ -48,31 +46,31 @@ public class ApiGatewayStepDefinitions {
         return DockerClientImpl.getInstance(config, httpClient);
     }
 
-    @Given("un usuario con credenciales válidas")
-    public void unUsuarioConCredencialesValidas() {
+    @Given("un usuario con credenciales válidas ApiGateway")
+    public void unUsuarioConCredencialesValidasApiGateway() {
         encenderContenedor("proyectomicros-authUser-1");
         userCrudStepDefinitions.verificarUsuarioNoE();
         username = "Ortiz";
         password = "1234";
     }
 
-    @Given("un usuario con credenciales inválidas")
-    public void unUsuarioConCredencialesInvalidas() {
+    @Given("un usuario con credenciales inválidas ApiGateway")
+    public void unUsuarioConCredencialesInvalidasApiGateway() {
         encenderContenedor("proyectomicros-authUser-1");
         userCrudStepDefinitions.verificarUsuarioNoE();
         username = "Ortiz";
         password = "123456";
     }
 
-    @Given("un perfil valido")
-    public void unPerfilConDetallesValidos() {
+    @Given("un perfil valido ApiGateway")
+    public void unPerfilConDetallesValidosApiGateway() {
         encenderContenedor("proyectomicros-profileService-1");
         profilesStepsDefinitions.verificarPerfilNoE();
         perfilData = "{ \"id_usuario\": \"123\", \"informacion_publica\": \"false\", \"apodo\": \"Juan\" }";
     }
 
     @When("se envía la solicitud al servicio de Usuarios")
-    public void seEnvíaUnaSolicitudDeAutenticacionConEsasCredenciales() {
+    public void seEnvíaUnaSolicitudDeAutenticacionConEsasCredencialesApiGateway() {
         String body = "{ \"username\": \"" + username + "\", \"password\": \"" + password + "\" }";
 
         response = given()
@@ -82,7 +80,7 @@ public class ApiGatewayStepDefinitions {
     }
 
     @When("se envía la solicitud al servicio de Usuarios y el servidor no responde")
-    public void seEnvíaUnaSolicitudDeAutenticacionConEsasCredencialesFallo() {
+    public void seEnvíaUnaSolicitudDeAutenticacionConEsasCredencialesFalloApiGateway() {
         apagarContenedor("proyectomicros-authUser-1");
 
         String body = "{ \"username\": \"" + username + "\", \"password\": \"" + password + "\" }";
@@ -94,7 +92,7 @@ public class ApiGatewayStepDefinitions {
     }
 
     @When("se envía la solicitud al servicio de Perfiles")
-    public void seEnvíaLaSolicitudAlServicioDePerfiles() {
+    public void seEnvíaLaSolicitudAlServicioDePerfilesApiGateway() {
         response = given()
                 .contentType("application/json")
                 .body(perfilData)
@@ -102,7 +100,7 @@ public class ApiGatewayStepDefinitions {
     }
 
     @When("se envía la solicitud al servicio de Perfiles y el servidor no responde")
-    public void seEnvíaLaSolicitudAlServicioDePerfilesFallo() {
+    public void seEnvíaLaSolicitudAlServicioDePerfilesFalloApiGateway() {
         apagarContenedor("proyectomicros-profileService-1");
         response = given()
                 .contentType("application/json")
@@ -110,13 +108,13 @@ public class ApiGatewayStepDefinitions {
                 .post(baseUrl + "/profile/profiles/");
     }
 
-    @Then("la respuesta obtenida debe tener un código de estado {int}")
-    public void elEstadoDeLaRespuestaDebeSer(Integer statusCode) {
+    @Then("la respuesta ApiGateway obtenida debe tener un código de estado {int}")
+    public void elEstadoDeLaRespuestaDebeSerApiGateway(Integer statusCode) {
         assertEquals(statusCode.intValue(), response.getStatusCode());
     }
 
-    @And("el mensaje de respuesta debe ser {string}")
-    public void elMensajeDeRespuestaDebeSer(String message) {
+    @And("el mensaje de respuesta ApiGateway debe ser {string}")
+    public void elMensajeDeRespuestaDebeSerApiGateway(String message) {
         try {
             String mensaje = response.jsonPath().getString("message");
             assertEquals(message, mensaje);
@@ -127,14 +125,14 @@ public class ApiGatewayStepDefinitions {
         }
     }
 
-    @Then("se debe devolver un token JWT")
-    public void seDebeDevolverUnTokenJWT() {
+    @Then("se debe devolver un token JWT al ApiGateway")
+    public void seDebeDevolverUnTokenJWTApiGateway() {
         token = response.jsonPath().getString("jwt");
         assertNotNull(token);
     }
 
-    @And("la respuesta debe cumplir con el esquema JSON {string}")
-    public void laRespuestaDebeCumplirConElEsquemaJSON(String schemaPath) {
+    @And("la respuesta ApiGateway debe cumplir con el esquema JSON {string}")
+    public void laRespuestaDebeCumplirConElEsquemaJSONApiGateway(String schemaPath) {
         response.then().assertThat()
                 .body(matchesJsonSchemaInClasspath(schemaPath));
     }

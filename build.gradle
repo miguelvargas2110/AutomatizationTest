@@ -44,7 +44,8 @@ dependencies {
     testImplementation 'io.cucumber:cucumber-java:7.18.1'
     testImplementation 'io.cucumber:cucumber-junit:7.18.1'
     testImplementation 'io.rest-assured:rest-assured:5.5.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.3'
+    testImplementation 'org.junit.platform:junit-platform-suite-api:1.11.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework:spring-test'
     testImplementation 'io.rest-assured:json-schema-validator:5.5.0'
@@ -52,6 +53,7 @@ dependencies {
 
 
     runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'com.h2database:h2:2.1.214'  // O la última versión disponible
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
@@ -64,3 +66,5 @@ bootJar {
 jar {
     enabled = false
 }
+
+

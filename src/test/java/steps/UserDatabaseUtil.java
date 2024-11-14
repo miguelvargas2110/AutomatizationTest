@@ -1,4 +1,4 @@
-package stepdefinitions.profiles;
+package steps;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,36 +6,48 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ProfilesDatabaseUtil {
-    private static final String URL = "jdbc:postgresql://localhost:5435/profiles_db";
+public class    UserDatabaseUtil {
+
+    private static final String URL = "jdbc:postgresql://localhost:5432/UserDB";
     private static final String USER = "postgres";
     private static final String PASSWORD = "ROOT";
 
-    public boolean verificarPerfilExistente(int id_usuario) {
-        String query = "SELECT COUNT(*) FROM profiles_perfil WHERE id_usuario = ?";
+    public boolean verificarUsuarioExiste(String username) {
+        String query = "SELECT COUNT(*) FROM usuario WHERE username = ?";
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
 
-            statement.setInt(1, id_usuario);
+            statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                return resultSet.getInt(1) > 0;  // Devuelve true si el perfil existe
+                return resultSet.getInt(1) > 0;  // Devuelve true si el usuario existe
             }
 
         } catch (SQLException e) {
             e.printStackTrace();  // Manejo de excepciones adecuado
         }
-        return false;  // Si hay algún error o no encuentra el perfil
+
+        return false;  // Si hay algún error o no encuentra el usuario
     }
 
-    public void borrarTodosLosPerfiles() {
-        String query = "DELETE FROM profiles_perfil";
+    public String obtenerContraseñaUsuario(String username) {
+        String query = "SELECT password FROM usuario WHERE username = ?";
+        String password = null;
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.executeUpdate();
+
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                password = resultSet.getString("password");
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return password;
     }
 }

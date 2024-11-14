@@ -37,4 +37,4 @@ pipeline {
                 archiveArtifacts artifacts: 'target/cucumber-reports.html', allowEmptyArchive: true
             }
         }
-}
+    }

@@ -30,7 +30,7 @@ public class LogsStepDefinitions {
     private String description;
     private String generatedDate;
     private String token = "";
-    private String testUsername = "";
+    private String testUsername = "testUser";
     private String testPassword = "1234";
     private String testEmail = "testuser@gmail.com";
 

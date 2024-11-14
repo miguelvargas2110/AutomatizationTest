@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ProfilesDatabaseUtil {
-    private static final String URL = "jdbc:postgresql://localhost:5435/profiles_db";
+    private static final String URL = "jdbc:postgresql://dbProfiles:5435/profiles_db";
     private static final String USER = "postgres";
     private static final String PASSWORD = "ROOT";
 

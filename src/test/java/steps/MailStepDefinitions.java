@@ -18,7 +18,7 @@ public class MailStepDefinitions {
     private String nombreServicio;
     private String endpointServicio;
     private Response response;
-    private final String baseUrlMail = "http://localhost:8005/mail/enviar";
+    private final String baseUrlMail = "http://mailService:8005/mail/enviar";
 
     @Given("un destinatario con el correo {string}")
     public void unDestinatarioConLosCorreos(String correos) {

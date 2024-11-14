@@ -27,7 +27,7 @@ public class ApiGatewayStepDefinitions {
     private String username = "";
     private String password = "";
     private String perfilData;
-    private String baseUrl = "http://localhost:8004";
+    private String baseUrl = "http://apiGateway:8004";
     private Response response;
     private String token;
     UserCrudStepDefinitions userCrudStepDefinitions = new UserCrudStepDefinitions();

@@ -15,7 +15,7 @@ public class RabbitMQStepsDefinitions {
     // Configuración para conectarse al contenedor de RabbitMQ
     private void connectToRabbitMQ() throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost"); // Cambiar si Docker usa otro host
+        factory.setHost("rabbitmq"); // Cambiar si Docker usa otro host
         factory.setPort(5672);
         factory.setUsername("guest");
         factory.setPassword("guest");

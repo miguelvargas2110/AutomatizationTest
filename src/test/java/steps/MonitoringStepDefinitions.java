@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class MonitoringStepDefinitions {
 
     MonitoringDatabaseUtil monitoringDatabaseUtil = new MonitoringDatabaseUtil();
-    private String baseUrlHealth = "http://localhost:8003/health";
+    private String baseUrlHealth = "http://monitoring:8003/health";
     private Response response;
     private String serviceName;
     private String endpoint;

@@ -25,7 +25,7 @@ public class ProfilesStepsDefinitions {
     private Response response;
     private String perfilId;
     private String perfilData;
-    private String baseUrl = "http://localhost:8000/api";
+    private String baseUrl = "http://profileService:8000/api";
     private ProfilesDatabaseUtil profilesDatabaseUtil = new ProfilesDatabaseUtil();
 
     public DockerClient dockerClientInit() {

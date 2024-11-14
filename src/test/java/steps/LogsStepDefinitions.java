@@ -20,8 +20,8 @@ public class LogsStepDefinitions {
 
     UserDatabaseUtil userDatabaseUtil = new UserDatabaseUtil();
 
-    private String baseUrlUsers = "http://localhost:8001";
-    private String baseUrlLogs = "http://localhost:8002";
+    private String baseUrlUsers = "http://authUser:8001";
+    private String baseUrlLogs = "http://logs:8002";
 
     private Response response;
     private String logType;

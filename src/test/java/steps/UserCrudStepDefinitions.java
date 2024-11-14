@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserCrudStepDefinitions {
 
     UserDatabaseUtil userDatabaseUtil = new UserDatabaseUtil();
-    private String baseUrl = "http://localhost:8001";
+    private String baseUrl = "http://authUser:8001";
     private Response response;
     private String username = "";
     private String password = "";

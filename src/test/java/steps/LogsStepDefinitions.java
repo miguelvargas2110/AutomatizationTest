@@ -193,7 +193,7 @@ public class LogsStepDefinitions {
     }
 
     public void verificarUsuarioELogs(){
-        boolean existe = userDatabaseUtil.verificarUsuarioExiste(testUsername);
+        boolean existe = LogsDatabaseUtil.verificarUsuarioExiste(testUsername);
         if(existe){
             generarTokenLogs();
             borrarUsuarioLogs();

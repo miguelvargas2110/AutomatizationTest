@@ -31,4 +31,27 @@ public class LogsDatabaseUtil {
 
         return false;  // Si hay algún error o la tabla está vacía
     }
+
+    private static final String URL2 = "jdbc:postgresql://dbUsers:5432/UserDB";
+    private static final String USER2 = "postgres";
+    private static final String PASSWORD2 = "ROOT";
+
+    public static boolean verificarUsuarioExiste(String username) {
+        String query = "SELECT COUNT(*) FROM usuario WHERE username = ?";
+        try (Connection connection = DriverManager.getConnection(URL2, USER2, PASSWORD2);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;  // Devuelve true si el usuario existe
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();  // Manejo de excepciones adecuado
+        }
+
+        return false;  // Si hay algún error o no encuentra el usuario
+    }
 }

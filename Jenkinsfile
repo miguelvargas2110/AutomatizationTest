@@ -35,7 +35,7 @@ pipeline {
                     junit '**/build/test-results/test/*.xml'
 
                     // Archivar los reportes de Cucumber si los tienes generados (especifica la ruta correcta)
-                    archiveArtifacts artifacts: '**/build/reports/cucumber/*.html', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'target/cucumber-reports.html', allowEmptyArchive: true
                 }
             }
         }

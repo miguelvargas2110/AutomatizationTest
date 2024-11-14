@@ -177,7 +177,7 @@ public class ApiGatewayStepDefinitions {
                 System.out.println("Contenedor iniciado correctamente.");
 
                 // Espera adicional para asegurar que la aplicación esté lista
-                waitForApplicationToBeReady();
+                waitForApplicationToBeReady(containerName);
             } else {
                 System.out.println("Tiempo de espera agotado. El contenedor no se inició.");
             }
@@ -186,14 +186,20 @@ public class ApiGatewayStepDefinitions {
         }
     }
 
-    private void waitForApplicationToBeReady() {
+    private void waitForApplicationToBeReady(String containerName) {
         int maxRetries = 15;
         int retries = 0;
         while (retries < maxRetries) {
             try {
-                Response response = given()
-                        .baseUri("http://localhost:8001")
-                        .get("/health");
+                if(containerName.equals("proyectomicros-authUser-1")) {
+                    Response response = given()
+                            .baseUri("http://authUser:8001")
+                            .get("/health");
+                }else{
+                    Response response = given()
+                            .baseUri("http://profileService:8000")
+                            .get("/health");
+                }
 
                 if (response.statusCode() == 200 &&
                         response.jsonPath().getString("status").equals("UP")) {

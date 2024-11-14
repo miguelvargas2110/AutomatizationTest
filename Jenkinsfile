@@ -16,6 +16,9 @@ pipeline {
 
         stage('Build') {
             steps {
+                // Dar permisos de ejecución a gradlew
+                sh 'chmod +x gradlew'
+
                 // Compilar el proyecto usando Gradle
                 sh './gradlew clean build'
             }
@@ -26,7 +29,6 @@ pipeline {
                 // Ejecutar las pruebas con Gradle, especificando la clase TestRunner si es necesario
                 sh './gradlew test --tests runners.TestRunner'
             }
-
             post {
                 always {
                     // Publicar los resultados de las pruebas en el reporte de Jenkins (usando el formato JUnit)

@@ -1,4 +1,4 @@
-Feature: Verificación de mensajes en colas de RabbitMQ
+  Feature: Verificación de mensajes en colas de RabbitMQ
   Como desarrollador
   Quiero verificar que los mensajes se envíen y reciban correctamente por medio de RabbitMQ en un entorno de contenedor Docker
   Para asegurarme de que las colas funcionan según lo esperado

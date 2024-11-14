@@ -16,4 +16,3 @@ Feature: Operaciones SignUp de Usuarios
     Then el estado de la respuesta debe ser 400
     And el mensaje de error debe ser "Este usuario ya existe"
     And la respuesta debe cumplir con el esquema JSON "UnsuccesfulOperation.json"
-

@@ -23,4 +23,17 @@ Feature: Operacion de la API Gateway
         Then la respuesta obtenida debe tener un código de estado 500
         And el mensaje de respuesta debe ser '"Internal Server Error"'
 
+    Scenario: Redireccionamiento exitoso de la solicitud a servicio de perfiles de creación
+        Given un perfil valido
+        When se envía la solicitud al servicio de Perfiles
+        Then la respuesta obtenida debe tener un código de estado 201
+        And el mensaje de respuesta debe ser "Perfil creado exitosamente"
+        And la respuesta debe cumplir con el esquema JSON "SuccesfulOperation.json"
+
+    Scenario: Redireccionamiento fallido de la solicitud a servicio de perfiles de creación
+        Given un perfil valido
+        When se envía la solicitud al servicio de Perfiles y el servidor no responde
+        Then la respuesta obtenida debe tener un código de estado 500
+        And el mensaje de respuesta debe ser '"Error interno"'
+
 

@@ -20,6 +20,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.github.dockerjava.api.DockerClient;
+import stepdefinitions.profiles.ProfilesStepsDefinitions;
 
 import java.time.Duration;
 
@@ -27,10 +28,12 @@ import java.time.Duration;
 public class ApiGatewayStepDefinitions {
     private String username = "";
     private String password = "";
-    private String baseUrl = "http://localhost:8004/auth";
+    private String perfilData;
+    private String baseUrl = "http://localhost:8004";
     private Response response;
     private String token;
     UserCrudStepDefinitions userCrudStepDefinitions = new UserCrudStepDefinitions();
+    ProfilesStepsDefinitions profilesStepsDefinitions = new ProfilesStepsDefinitions();
 
     public DockerClient dockerClientInit() {
         DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
@@ -47,7 +50,7 @@ public class ApiGatewayStepDefinitions {
 
     @Given("un usuario con credenciales válidas")
     public void unUsuarioConCredencialesValidas() {
-        encenderContenedor();
+        encenderContenedor("proyectomicros-authUser-1");
         userCrudStepDefinitions.verificarUsuarioNoE();
         username = "Ortiz";
         password = "1234";
@@ -55,10 +58,17 @@ public class ApiGatewayStepDefinitions {
 
     @Given("un usuario con credenciales inválidas")
     public void unUsuarioConCredencialesInvalidas() {
-        encenderContenedor();
+        encenderContenedor("proyectomicros-authUser-1");
         userCrudStepDefinitions.verificarUsuarioNoE();
         username = "Ortiz";
         password = "123456";
+    }
+
+    @Given("un perfil valido")
+    public void unPerfilConDetallesValidos() {
+        encenderContenedor("proyectomicros-profileService-1");
+        profilesStepsDefinitions.verificarPerfilNoE();
+        perfilData = "{ \"id_usuario\": \"123\", \"informacion_publica\": \"false\", \"apodo\": \"Juan\" }";
     }
 
     @When("se envía la solicitud al servicio de Usuarios")
@@ -68,19 +78,36 @@ public class ApiGatewayStepDefinitions {
         response = given()
                 .contentType("application/json")
                 .body(body)
-                .post(baseUrl + "/login");
+                .post(baseUrl + "/auth/login");
     }
 
     @When("se envía la solicitud al servicio de Usuarios y el servidor no responde")
     public void seEnvíaUnaSolicitudDeAutenticacionConEsasCredencialesFallo() {
-        apagarContenedor();
+        apagarContenedor("proyectomicros-authUser-1");
 
         String body = "{ \"username\": \"" + username + "\", \"password\": \"" + password + "\" }";
 
         response = given()
                 .contentType("application/json")
                 .body(body)
-                .post(baseUrl + "/login");
+                .post(baseUrl + "/auth/login");
+    }
+
+    @When("se envía la solicitud al servicio de Perfiles")
+    public void seEnvíaLaSolicitudAlServicioDePerfiles() {
+        response = given()
+                .contentType("application/json")
+                .body(perfilData)
+                .post(baseUrl + "/profile/profiles/");
+    }
+
+    @When("se envía la solicitud al servicio de Perfiles y el servidor no responde")
+    public void seEnvíaLaSolicitudAlServicioDePerfilesFallo() {
+        apagarContenedor("proyectomicros-profileService-1");
+        response = given()
+                .contentType("application/json")
+                .body(perfilData)
+                .post(baseUrl + "/profile/profiles/");
     }
 
     @Then("la respuesta obtenida debe tener un código de estado {int}")
@@ -112,9 +139,9 @@ public class ApiGatewayStepDefinitions {
                 .body(matchesJsonSchemaInClasspath(schemaPath));
     }
 
-    public void apagarContenedor() {
+    public void apagarContenedor(String containerName) {
         DockerClient dockerClient = dockerClientInit();
-        InspectContainerResponse container = dockerClient.inspectContainerCmd("proyectomicros-authUser-1").exec();
+        InspectContainerResponse container = dockerClient.inspectContainerCmd(containerName).exec();
 
         // Verifica si el contenedor está en ejecución antes de intentar detenerlo
         if ("running".equals(container.getState().getStatus())) {
@@ -126,9 +153,9 @@ public class ApiGatewayStepDefinitions {
     }
 
 
-    public void encenderContenedor() {
+    public void encenderContenedor(String containerName) {
         DockerClient dockerClient = dockerClientInit();
-        InspectContainerResponse container = dockerClient.inspectContainerCmd("proyectomicros-authUser-1").exec();
+        InspectContainerResponse container = dockerClient.inspectContainerCmd(containerName).exec();
 
         // Verifica si el contenedor está detenido antes de iniciarlo
         if ("exited".equals(container.getState().getStatus())) {
@@ -191,7 +218,4 @@ public class ApiGatewayStepDefinitions {
 
         System.out.println("Tiempo de espera agotado. La aplicación no está lista.");
     }
-
-
-
 }

@@ -15,15 +15,23 @@ public class ProfilesStepsDefinitions {
     private Response response;
     private String perfilId;
     private String perfilData;
-    private String baseUrl = "http://localhost:8000";  // Cambiar según el entorno
+    private String baseUrl = "http://localhost:8000/api";
+    private ProfilesDatabaseUtil profilesDatabaseUtil = new ProfilesDatabaseUtil();
 
     // Escenarios de Creación de Perfil
-    @Given("un perfil con detalles válidos y un campo \"id_usuario\" proporcionado")
+    @Given("un perfil valido")
     public void unPerfilConDetallesValidos() {
-        perfilData = "{ \"id_usuario\": \"123\", \"nombre\": \"Juan Perez\", \"email\": \"juan@example.com\" }";
+        verificarPerfilNoE();
+        perfilData = "{ \"id_usuario\": \"123\", \"informacion_publica\": \"false\", \"apodo\": \"Juan\" }";
     }
 
-    @When("se envía una solicitud POST a la API Gateway para crear un perfil con los datos del perfil")
+    // Escenarios de Creación con Error (falta id_usuario)
+    @Given("un perfil invalido")
+    public void unPerfilSinElCampoIdUsuario() {
+        perfilData = "{ \"informacion_publica\": \"false\", \"apodo\": \"Juan\" }";  // Sin el campo "id_usuario"
+    }
+
+    @When("se envía una solicitud POST para crear un perfil")
     public void seEnvíaUnaSolicitudPOSTParaCrearPerfil() {
         response = given()
                 .contentType("application/json")
@@ -36,31 +44,6 @@ public class ProfilesStepsDefinitions {
         assertEquals(statusCode, response.getStatusCode());
     }
 
-    @And("el mensaje de respuesta debe ser {string}")
-    public void elMensajeDeRespuestaDebeSer(String message) {
-        String mensaje = response.jsonPath().getString("message");
-        assertEquals(message, mensaje);
-    }
-
-    @And("la respuesta debe cumplir con el esquema JSON {string}")
-    public void laRespuestaDebeCumplirConElEsquemaJSON(String schemaPath) {
-        response.then().assertThat().body(matchesJsonSchemaInClasspath(schemaPath));
-    }
-
-    // Escenarios de Creación con Error (falta id_usuario)
-    @Given("un perfil sin el campo \"id_usuario\" proporcionado")
-    public void unPerfilSinElCampoIdUsuario() {
-        perfilData = "{ \"nombre\": \"Juan Perez\", \"email\": \"juan@example.com\" }";  // Sin el campo "id_usuario"
-    }
-
-    @When("se envía una solicitud POST a la API Gateway para crear un perfil sin el campo requerido")
-    public void seEnvíaUnaSolicitudPOSTParaCrearPerfilConError() {
-        response = given()
-                .contentType("application/json")
-                .body(perfilData)
-                .post(baseUrl + "/profiles/");
-    }
-
     @And("el mensaje de error de respuesta debe ser {string}")
     public void elMensajeDeErrorDeRespuestaDebeSer(String errorMessage) {
         String mensajeError = response.jsonPath().getString("message");
@@ -70,12 +53,15 @@ public class ProfilesStepsDefinitions {
     // Escenarios de obtención de perfiles
     @Given("existen perfiles registrados en el servicio de perfiles")
     public void existenPerfilesRegistrados() {
-        // Aquí podríamos simular que existen perfiles, o directamente asegurarnos de que el perfil está creado
-        perfilData = "{ \"id_usuario\": \"123\", \"nombre\": \"Juan Perez\", \"email\": \"juan@example.com\" }";
-        given().contentType("application/json").body(perfilData).post(baseUrl + "/profiles/");
+        verificarPerfilE();
     }
 
-    @When("se envía una solicitud GET a la API Gateway para obtener todos los perfiles")
+    @Given("no existen perfiles registrados en el servicio de perfiles")
+    public void noExistenPerfilesRegistradosEnElServicioDePerfiles() {
+        profilesDatabaseUtil.borrarTodosLosPerfiles();
+    }
+
+    @When("se envía una solicitud GET para obtener todos los perfiles")
     public void seEnvíaUnaSolicitudGETParaObtenerPerfiles() {
         response = given().get(baseUrl + "/profiles/");
     }
@@ -86,36 +72,36 @@ public class ProfilesStepsDefinitions {
         assertNotNull(perfiles);
     }
 
-    @And("la respuesta debe cumplir con el esquema JSON {string}")
-    public void laRespuestaDebeCumplirConElEsquemaJSONParaLista(String schemaPath) {
-        response.then().assertThat().body(matchesJsonSchemaInClasspath(schemaPath));
+
+    @Given("un perfil inexistente")
+    public void unPerfilInexistente() {
+        verificarPerfilIne();
+        perfilId = "999";
     }
 
-    // Escenarios de obtención de perfil específico
-    @Given("existe un perfil registrado con \"id_usuario\" \"123\"")
-    public void existeUnPerfilRegistrado() {
-        perfilId = "123"; // Simulamos que ya existe
-    }
-
-    @When("se envía una solicitud GET a la API Gateway para obtener el perfil con \"id_usuario\" \"123\"")
+    @When("se envía una solicitud GET para obtener el perfil")
     public void seEnvíaUnaSolicitudGETParaObtenerPerfilEspecifico() {
         response = given().get(baseUrl + "/profiles/" + perfilId + "/");
     }
 
-    @Then("el mensaje de respuesta debe ser {string}")
-    public void elMensajeDeRespuestaPerfilDebeSer(String message) {
-        String mensaje = response.jsonPath().getString("message");
-        assertEquals(message, mensaje);
-    }
-
     // Escenarios de actualización de perfil
-    @Given("un perfil con \"id_usuario\" \"123\" existente")
+    @Given("un perfil existente")
     public void unPerfilExistente() {
+        verificarPerfilE();
         perfilId = "123";
-        perfilData = "{ \"nombre\": \"Juan Perez Actualizado\", \"email\": \"juan_actualizado@example.com\" }";
     }
 
-    @When("se envía una solicitud PUT a la API Gateway para actualizar el perfil con \"id_usuario\" \"123\" con nuevos datos")
+    @And("los datos de perfil son válidos")
+    public void losDatosDePerfilSonVálidos() {
+        perfilData = "{ \"informacion_publica\": \"true\", \"apodo\": \"Juancho\" }";
+    }
+
+    @And("los datos de perfil son inválidos")
+    public void losDatosDePerfilSonInválidos() {
+        perfilData = "{ \"informacion_publica\": \"Si\", \"apodo\": \"Juancho\" }";
+    }
+
+    @When("se envía una solicitud PUT para actualizar el perfil")
     public void seEnvíaUnaSolicitudPUTParaActualizarPerfil() {
         response = given()
                 .contentType("application/json")
@@ -123,19 +109,7 @@ public class ProfilesStepsDefinitions {
                 .put(baseUrl + "/profiles/" + perfilId + "/");
     }
 
-    @Then("el mensaje de respuesta debe ser {string}")
-    public void elMensajeDeRespuestaActualizarPerfilDebeSer(String message) {
-        String mensaje = response.jsonPath().getString("message");
-        assertEquals(message, mensaje);
-    }
-
-    // Escenarios de eliminación de perfil
-    @Given("un perfil con \"id_usuario\" \"123\" existente")
-    public void perfilExistenteParaEliminacion() {
-        perfilId = "123"; // El perfil existe
-    }
-
-    @When("se envía una solicitud DELETE a la API Gateway para eliminar el perfil con \"id_usuario\" \"123\"")
+    @When("se envía una solicitud DELETE para eliminar el perfil")
     public void seEnvíaUnaSolicitudDELETEParaEliminarPerfil() {
         response = given().delete(baseUrl + "/profiles/" + perfilId + "/");
     }
@@ -146,24 +120,30 @@ public class ProfilesStepsDefinitions {
         assertEquals(message, mensaje);
     }
 
-    // Escenarios de errores generales
-    @Given("el servicio de perfiles no está disponible")
-    public void servicioNoDisponible() {
-        // Aquí podríamos simular que el servicio está caído o deshabilitado
-    }
-
-    @When("se envía una solicitud a la API Gateway para realizar una operación sobre los perfiles")
-    public void seEnvíaUnaSolicitudDeErrorInterno() {
-        response = given().get(baseUrl + "/profiles/");
-    }
-
-    @Then("el estado de la respuesta debe ser 500")
-    public void elEstadoDeLaRespuestaDeErrorInterno() {
-        assertEquals(500, response.getStatusCode());
-    }
-
     @And("la respuesta debe cumplir con el esquema JSON {string}")
     public void laRespuestaDeErrorDebeCumplirConElEsquemaJSON(String schemaPath) {
         response.then().assertThat().body(matchesJsonSchemaInClasspath(schemaPath));
+    }
+
+    public void verificarPerfilIne(){
+        boolean existe = profilesDatabaseUtil.verificarPerfilExistente(999);
+        if(existe){
+            given().delete(baseUrl + "/profiles/999/");
+        }
+    }
+
+    public void verificarPerfilNoE(){
+        boolean existe = profilesDatabaseUtil.verificarPerfilExistente(123);
+        if(existe){
+            given().delete(baseUrl + "/profiles/123/");
+        }
+    }
+
+    public void verificarPerfilE(){
+        boolean existe = profilesDatabaseUtil.verificarPerfilExistente(123);
+        if(!existe){
+            perfilData = "{ \"id_usuario\": \"123\", \"informacion_publica\": \"false\", \"apodo\": \"Juan\" }";
+            given().contentType("application/json").body(perfilData).post(baseUrl + "/profiles/");
+        }
     }
 }
